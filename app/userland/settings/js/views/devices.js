@@ -14,19 +14,31 @@ class DevicesView extends LitElement {
 
   constructor () {
     super()
+    this.settings = undefined
+    this.browserInfo = undefined
+    this.browserEvents = undefined
   }
 
   async load () {
+    this.browserInfo = await beaker.browser.getInfo()
+    this.daemonStatus = await beaker.browser.getDaemonStatus()
+    console.log('loaded', {
+      browserInfo: this.browserInfo,
+      daemonStatus: this.daemonStatus
+    })
     this.requestUpdate()
   }
 
   unload () {
+    this.browserEvents.close()
   }
 
   // rendering
   // =
 
   render () {
+  document.title = "Settings - Devices";
+
     return html`
       <link rel="stylesheet" href="beaker://assets/font-awesome.css">
       <div class="section">

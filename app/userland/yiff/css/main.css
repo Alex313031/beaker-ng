@@ -1,0 +1,77 @@
+@import "beaker://app-stdlib/css/common.css";
+@import "beaker://assets/font-awesome.css";
+
+body {
+  --border-color--default: #bbc;
+  --border-color--light: #ccd;
+  --border-color: var(--border-color--default);
+  --text-color--default: #333;
+  --text-color--dark: #111;
+  --text-color--lightish: #555;
+  --text-color--light: #667;
+  --text-color--very-light: #bbc;
+  --text-color--subnav-item: #34495e;
+  --bg-color--default: #fff;
+  --bg-color--light: #fafafd;
+  --bg-color--message: #f3f3f8;
+  --bg-color--subnav-item--hover: #f0f0f5;
+  --bg-color--subnav-item--current: #dde;
+
+  font-size: 13px;
+  background: #fff;
+  color: #333;
+  margin: auto;
+  margin: 0.5em auto;
+  max-width: 48em;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    --blue: #88c;
+    --border-color--default: #666;
+    --border-color--light: #555;
+    --text-color--default: #ccc;
+    --text-color--dark: #eee;
+    --text-color--lightish: #bbb;
+    --text-color--light: #aaa;
+    --text-color--very-light: #555;
+    --text-color--subnav-item: #bbb;
+    --bg-color--default: #222;
+    --bg-color--light: #333;
+    --bg-color--message: #333;
+    --bg-color--subnav-item--hover: #444;
+    --bg-color--subnav-item--current: #555;
+
+    font-size: 13px;
+    background: #222;
+    color: #ccc;
+    margin: auto;
+    margin: 0.5em auto;
+    max-width: 48em;
+  }
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  border: 1px solid transparent;
+}
+
+img:hover {
+  border: 1px solid #5746FF;
+}
+
+img:active {
+  border: 1px solid #797979;
+}
+
+.center {
+  text-align: center;
+  align-content: center;
+}
+
+.content {
+  padding: auto;
+}

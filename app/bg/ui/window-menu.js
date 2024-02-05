@@ -8,6 +8,7 @@ import * as shellMenus from './subwindows/shell-menus'
 import { download } from './downloads'
 import hyper from '../hyper/index'
 import * as settingsDb from '../dbs/settings'
+import * as electronLog from 'electron-log'
 
 // globals
 // =
@@ -221,6 +222,24 @@ export function buildWindowMenu (opts = {}) {
         accelerator: 'CmdOrCtrl+Shift+W',
         click: function (item) {
           if (win) win.close()
+        },
+        reserved: true
+      },
+      { type: 'separator' },
+      {
+        id: 'closeApp',
+        label: 'Exit Beaker',
+        accelerator: 'Ctrl+Q',
+        async click () {
+          var runBackground = await settingsDb.get('run_background')
+          if (runBackground == 1) {
+            for (let win of BrowserWindow.getAllWindows()) {
+              win.close()
+              app.quit()
+            }
+          } else {
+            app.quit()
+          }
         },
         reserved: true
       }
@@ -566,9 +585,18 @@ export function buildWindowMenu (opts = {}) {
   }
 
   var showHistoryAccelerator = 'Ctrl+H'
-
   if (process.platform === 'darwin') {
     showHistoryAccelerator = 'Cmd+Y'
+  }
+
+  var navigateBackwardAccelerator = 'Alt+Left'
+  if (process.platform === 'darwin') {
+    navigateBackwardAccelerator = 'Cmd+Left'
+  }
+
+  var navigateForwardAccelerator = 'Alt+Right'
+  if (process.platform === 'darwin') {
+    navigateForwardAccelerator = 'Cmd+Right'
   }
 
   var historyMenu = {
@@ -577,18 +605,18 @@ export function buildWindowMenu (opts = {}) {
     submenu: [
       {
         id: 'back',
-        label: 'Back',
+        label: 'Go Back',
         enabled: !noWindows,
-        accelerator: 'CmdOrCtrl+Left',
+        accelerator: navigateBackwardAccelerator,
         click: function (item) {
           if (tab) tab.webContents.goBack()
         }
       },
       {
         id: 'forward',
-        label: 'Forward',
+        label: 'Go Forward',
         enabled: !noWindows,
-        accelerator: 'CmdOrCtrl+Right',
+        accelerator: navigateForwardAccelerator,
         click: function (item) {
           if (tab) tab.webContents.goForward()
         }
@@ -648,7 +676,7 @@ export function buildWindowMenu (opts = {}) {
       },
       {
         id: 'toggleHypercoreDevtools',
-        label: 'Toggle Hypercore Devtools',
+        label: 'Toggle Hypercore Dev Console',
         enabled: !noWindows,
         click: async function (item) {
           if (tab) tab.togglePaneByOrigin({url: 'beaker://hypercore-tools/'})
@@ -661,31 +689,55 @@ export function buildWindowMenu (opts = {}) {
         click: function (item) {
           if (tab) tab.toggleLiveReloading()
         }
+      },
+      { type: 'separator' },
+      {
+        id: 'toggleShellWindow',
+        label: 'Reload Shell Window',
+        enabled: !noWindows,
+        click: function () {
+          win.webContents.reloadIgnoringCache()
+        }
+      },
+      {
+        id: 'toggleShellWindowDevTools',
+        label: 'Open Shell Window DevTools',
+        enabled: !noWindows,
+        accelerator: 'F12',
+        click: function () {
+          win.webContents.openDevTools({mode: 'detach'})
+        }
+      },
+      {
+        id: 'openElectronDevTools',
+        label: 'Open Electron DevTools',
+        enabled: !noWindows,
+        accelerator: 'CmdorCtrl+Shift+F12',
+        click: function () {
+          var topwin = BrowserWindow.getFocusedWindow()
+          topwin.openDevTools({mode: 'detach'})
+        }
+      },
+      {
+        id: 'beakerInternals',
+        label: 'Open Beaker Internals',
+        accelerator: 'CmdOrCtrl+Shift+Alt+B',
+        click: function (item) {
+          if (win) tabManager.create(win, 'beaker://settings/?view=internals', {setActive: true})
+        }
+      },
+      {
+        id: 'openChromeGPU',
+        label: 'Open chrome://gpu',
+        enabled: !noWindows,
+        accelerator: 'CmdorCtrl+Alt+G',
+        click: function () {
+          const gpuWindow = new BrowserWindow({width: 900, height: 700, title: "GPU Internals"});
+          gpuWindow.loadURL('chrome://gpu');
+          electronLog.info('Opened chrome://gpu');
+        }
       }
     ]
-  }
-
-  if (getEnvVar('BEAKER_DEV_MODE')) {
-    developerMenu.submenu.unshift({
-      type: 'submenu',
-      label: 'Advanced Tools',
-      submenu: [
-        {
-          label: 'Reload Shell-Window',
-          enabled: !noWindows,
-          click: function () {
-            win.webContents.reloadIgnoringCache()
-          }
-        },
-        {
-          label: 'Toggle Shell-Window DevTools',
-          enabled: !noWindows,
-          click: function () {
-            win.webContents.openDevTools({mode: 'detach'})
-          }
-        }
-      ]
-    })
   }
 
   const gotoTabShortcut = index => ({
@@ -754,7 +806,7 @@ export function buildWindowMenu (opts = {}) {
         id: 'nextTab',
         label: 'Next Tab',
         enabled: !noWindows,
-        accelerator: (process.platform === 'darwin') ? 'Alt+CmdOrCtrl+Right' : 'CmdOrCtrl+PageDown',
+        accelerator: (process.platform === 'darwin') ? 'Alt+CmdOrCtrl+Right' : 'CmdOrCtrl+Tab',
         click: function (item) {
           if (win) tabManager.changeActiveBy(win, 1)
         }
@@ -763,7 +815,7 @@ export function buildWindowMenu (opts = {}) {
         id: 'previousTab',
         label: 'Previous Tab',
         enabled: !noWindows,
-        accelerator: (process.platform === 'darwin') ? 'Alt+CmdOrCtrl+Left' : 'CmdOrCtrl+PageUp',
+        accelerator: (process.platform === 'darwin') ? 'Alt+CmdOrCtrl+Left' : 'CmdOrCtrl+Shift+Tab',
         click: function (item) {
           if (win) tabManager.changeActiveBy(win, -1)
         }
@@ -780,15 +832,34 @@ export function buildWindowMenu (opts = {}) {
           gotoTabShortcut(6),
           gotoTabShortcut(7),
           gotoTabShortcut(8),
+          gotoTabShortcut(9),
           {
             label: `Last Tab`,
             enabled: !noWindows,
-            accelerator: `CmdOrCtrl+9`,
+            accelerator: `CmdOrCtrl+0`,
             click: function (item) {
               if (win) tabManager.setActive(win, tabManager.getAll(win).slice(-1)[0])
             }
           }
         ]
+      },
+      {
+        id: 'duplicateTab',
+        label: 'Duplicate Tab',
+        enabled: !noWindows,
+        accelerator: 'Shift+CmdOrCtrl+D',
+        click: function (item) {
+          if (tab) tabManager.create(win, tab.url, {adjacentActive: true})
+        }
+      },
+      {
+        id: 'newTabToRight',
+        label: 'New Tab to the Right',
+        enabled: !noWindows,
+        accelerator: 'Shift+CmdOrCtrl+K',
+        click: function (item) {
+          if (tab) tabManager.create(win, null, {setActive: true, adjacentActive: true})
+        }
       },
       {
         id: 'popOutTab',
@@ -820,7 +891,7 @@ export function buildWindowMenu (opts = {}) {
         label: 'Beaker Help',
         accelerator: 'F1',
         click: function (item) {
-          if (win) tabManager.create(win, 'https://docs.beakerbrowser.com/', {setActive: true})
+          if (win) tabManager.create(win, 'https://thorium.rocks/docs.beakerbrowser.com/', {setActive: true})
         }
       },
       {type: 'separator'},
@@ -828,14 +899,25 @@ export function buildWindowMenu (opts = {}) {
         id: 'reportIssue',
         label: 'Report Issue',
         click: function (item) {
-          if (win) tabManager.create(win, 'https://github.com/beakerbrowser/beaker/issues', {setActive: true})
+          if (win) tabManager.create(win, 'https://github.com/Alex313031/beaker-ng/issues', {setActive: true})
         }
       },
       {
         id: 'beakerDiscussions',
         label: 'Discussion Forum',
         click: function (item) {
-          if (win) tabManager.create(win, 'https://github.com/beakerbrowser/beaker/discussions', {setActive: true})
+          if (win) tabManager.create(win, 'https://github.com/Alex313031/beaker-ng/discussions', {setActive: true})
+        }
+      },
+      { type: 'separator' },
+      {
+        id: 'beakerHumans',
+        label: 'View Humans.txt',
+        accelerator: 'CmdOrCtrl+Shift+Alt+H',
+        click: function (item) {
+          const humansWindow = new BrowserWindow({width: 532, height: 628, title: "Humans.txt"});
+            humansWindow.loadFile('./humans.txt');
+            electronLog.info('Opened humans.txt!');
         }
       }
     ]
@@ -843,10 +925,12 @@ export function buildWindowMenu (opts = {}) {
   if (process.platform !== 'darwin') {
     helpMenu.submenu.push({ type: 'separator' })
     helpMenu.submenu.push({
+      id: 'beakerAbout',
       label: 'About',
+      accelerator: 'CmdOrCtrl+Shift+Alt+A',
       role: 'about',
       click: function (item) {
-        if (win) tabManager.create(win, 'beaker://settings', {setActive: true})
+        if (win) tabManager.create(win, 'beaker://settings/?view=info', {setActive: true})
       }
     })
   }

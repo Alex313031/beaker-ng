@@ -1,0 +1,6 @@
+{
+  "title": "Paul Frazee",
+  "description": "Co-creator of the Beaker browser",
+  "type": ["user", "unwalled.garden/user"],
+  "fallback_page": "/index.html"
+}

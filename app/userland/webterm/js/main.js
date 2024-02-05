@@ -161,7 +161,7 @@ class WebTerm extends LitElement {
 
     if (!this.isLoaded) {
       await this.importEnvironment()
-      await this.output(html`<div><strong>Welcome to webterm 1.0.</strong> Type <code>help</code> if you get lost.</div>`)
+      await this.output(html`<div><strong>Welcome to webterm 1.0.1.</strong> Type <code>help</code> if you get lost.</div>`)
       this.isLoaded = true
     }
 

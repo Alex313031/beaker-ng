@@ -5,7 +5,7 @@ customElements.define('background-run-view', class extends BaseSlideView {
     super()
     beaker.browser.updateSetupState({profileSetup: 1})
     var checkbox = this.shadowRoot.querySelector('input')
-    checkbox.checked = true
+    checkbox.checked = false
     checkbox.addEventListener('change', e => {
       beaker.browser.setSetting('run_background', checkbox.checked ? 1 : 0)
     })

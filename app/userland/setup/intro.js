@@ -22,7 +22,7 @@ customElements.define('intro-view', class extends HTMLElement {
   <div class="ring" id="ring6"></div>
   <div class="nub"></div>
 </div>
-<h1><span>Welcome</span> <span>to</span> <span>Beaker</span></h1>
+<h1><span>Welcome</span> <span>to</span> <span>Beaker!</span></h1>
 <a>Get Started &gt;</a>
 <style>
   :host {

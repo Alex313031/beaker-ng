@@ -1,4 +1,4 @@
-import { app, BrowserView, nativeTheme } from 'electron'
+import { app, BrowserView, webFrame, nativeTheme } from 'electron'
 import errorPage from '../../lib/error-page'
 import path from 'path'
 import { promises as fs } from 'fs'
@@ -20,6 +20,7 @@ import * as folderSyncDb from '../../dbs/folder-sync'
 import * as filesystem from '../../filesystem/index'
 import * as bookmarks from '../../filesystem/bookmarks'
 import hyper from '../../hyper/index'
+import * as electronLog from 'electron-log'
 
 const ERR_ABORTED = -3
 const ERR_CONNECTION_REFUSED = -102
@@ -734,6 +735,8 @@ export class Pane extends EventEmitter {
       this.wasDriveTimeout = true
     }
 
+    // Log navigation changes to console
+    electronLog.info('Navigated to URL: %c' + url, 'color: blue')
     // emit
     this.emitUpdateState()
   }
@@ -792,6 +795,11 @@ export class Pane extends EventEmitter {
     // update state
     var isInsecureResponse = IS_CODE_INSECURE_RESPONSE(errorCode)
     this.loadError = {isInsecureResponse, errorCode, errorDescription, validatedURL}
+    // Log navigation errors
+    const loadErrorCodeLog = errorCode
+    const loadErrorDescLog = errorDescription
+    const loadErrorUrlLog = validatedURL
+    electronLog.error('Failed to load URL: %c' + validatedURL, 'color: red', '[ Error Code: %c' + loadErrorCodeLog, 'color: yellow', '| %c' + loadErrorDescLog, 'color: yellow', ']')
     this.emitUpdateState()
 
     // render failure page

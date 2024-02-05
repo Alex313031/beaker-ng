@@ -177,7 +177,7 @@ class NavbarLocation extends LitElement {
         <input
           type="text"
           value="${this.modifiedUrl}"
-          placeholder="Search or enter your address here"
+          placeholder="Search or enter an address here"
           @focus=${this.onFocusLocation}
           @blur=${this.onBlurLocation}
           @input=${this.onInputLocation}
@@ -193,7 +193,7 @@ class NavbarLocation extends LitElement {
     if (this.url.startsWith('beaker://desktop')) {
       return html`
         <div class="input-pretty" @mouseup=${this.onClickLocation}>
-          <span class="syntax">Search or enter your address here</span>
+          <span class="syntax">Search or enter an address here</span>
         </div>
       `
     }
@@ -580,8 +580,8 @@ NavbarLocation.styles = [buttonResetCSS, tooltipCSS, css`
   flex: 1;
   background: var(--bg-color--location-input);
   border: 1px solid var(--border-color--location-input);
-  border-radius: 16px;
-  padding-right: 8px;
+  border-radius: 4px;
+  padding-right: 4px;
   user-select: none;
 }
 
@@ -594,8 +594,8 @@ NavbarLocation.styles = [buttonResetCSS, tooltipCSS, css`
 }
 
 :host([autocomplete-open]) {
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
   border: 1px solid var(--border-color--input--focused);

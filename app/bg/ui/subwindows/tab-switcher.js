@@ -30,7 +30,9 @@ var views = {} // map of {[parentWindow.id] => BrowserView}
 export function setup (parentWindow) {
   var view = views[parentWindow.id] = new BrowserView({
     webPreferences: {
-      defaultEncoding: 'utf-8'
+      defaultEncoding: 'utf-8',
+      contextIsolation: false,
+      worldSafeExecuteJavaScript: true
     }
   })
   view.webContents.loadFile(path.join(__dirname, 'fg', 'tab-switcher', 'index.html'))

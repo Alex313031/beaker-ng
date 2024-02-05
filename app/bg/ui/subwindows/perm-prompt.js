@@ -59,7 +59,9 @@ export async function create (parentWindow, tab, params) {
   var view = views[tab.id] = new BrowserView({
     webPreferences: {
       defaultEncoding: 'utf-8',
-      preload: path.join(__dirname, 'fg', 'perm-prompt', 'index.build.js')
+      preload: path.join(__dirname, 'fg', 'perm-prompt', 'index.build.js'),
+      contextIsolation: false,
+      worldSafeExecuteJavaScript: true
     }
   })
   parentWindow.addBrowserView(view)

@@ -16,6 +16,7 @@ function main () {
   rmNodeModules(scriptsDir)
   rmNodeModules(appDir)
   rmPackageLock(scriptsDir)
+  // be careful with this, can break hypercore
   rmPackageLock(appDir)
   run('npm install', {shell: true}, function () {
     run('npm run rebuild', {shell: true}, function () {

@@ -43,10 +43,11 @@ export async function runSetupFlow () {
         defaultEncoding: 'utf-8',
         nodeIntegration: false,
         contextIsolation: true,
+        worldSafeExecuteJavaScript: false,
         webviewTag: false,
         sandbox: true,
         webSecurity: true,
-        enableRemoteModule: false,
+        enableRemoteModule: true,
         allowRunningInsecureContent: false
       },
       icon: ICON_PATH,

@@ -12,7 +12,7 @@ init:
   - git config --global core.autocrlf input
 
 install:
-  - ps: Install-Product node 11 x64
+  - ps: Install-Product node 14 x64
   - yarn
   - yarn run rebuild
 
@@ -23,4 +23,7 @@ test: off
 
 artifacts:
   - path: 'dist\*.exe'
+  - path: 'dist\*.deb'
+  - path: 'dist\*.zip'
+  - path: 'dist\*.AppImage'
   - path: 'dist\latest.yml'

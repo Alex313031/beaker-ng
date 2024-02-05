@@ -12,34 +12,51 @@ We welcome any type of contribution, not only code. You can help with
 
 Looking to work on Beaker? [Watch this video](https://www.youtube.com/watch?v=YuE9OO-ZDYo) and take a look at [the build notes](./build-notes.md).
 
-## Building from source
+### Building from Source
 
-Requires node 12 or higher.
+Requires node 12, 14, or 16.
 
-In Linux (and in some cases macOS) you need libtool, m4, and automake:
+On Linux (and in some cases macOS) you need libtool, m4, autoconf, and automake:
 
 ```bash
-sudo apt-get install libtool m4 make g++  # debian/ubuntu
-sudo dnf install libtool m4 make gcc-c++  # fedora
+sudo apt-get install libtool m4 make g++ autoconf # debian/ubuntu
+sudo dnf install libtool m4 make gcc-c++ libXScrnSaver  # fedora
+brew install libtool autoconf automake # macos
 ```
 
-In Windows, you'll need to install [Python 2.7](https://www.python.org/downloads/release/python-2711/), Visual Studio 2015 or 2017, and [Git](https://git-scm.com/download/win). (You might try [windows-build-tools](https://www.npmjs.com/package/windows-build-tools).) Then run:
+On Windows, you'll need to install [Python 3.9](https://www.python.org/downloads/release/python-2913/), Visual Studio 2015 or 2017, and [Git](https://git-scm.com/download/win). (You might try [windows-build-tools](https://www.npmjs.com/package/windows-build-tools) in place of MSVS.) Then run:
 
 ```powershell
-npm config set python c:/python27
-npm config set msvs_version 2015
-npm install -g node-gyp
+npm config set python C:\absolute\path\to\python.exe
+npm config set msvs_version 2017
 npm install -g gulp
 ```
 
-To build:
+To Build:
 
 ```bash
-git clone https://github.com/beakerbrowser/beaker.git
+git clone https://github.com/Alex313031/beaker-ng.git
 cd beaker/scripts
-npm install
-npm run rebuild # see https://github.com/electron/electron/issues/5851
-npm start
+npm install # don't worry about v8 api errors building native modules - rebuild will fix
+npm run rebuild # needed after each install for sqlite3. See https://github.com/electron/electron/issues/5851
+npm start # for generating installation packages, see below
+```
+
+To Clean
+
+```bash
+npm run clean # cleans node_modules
+npm run distclean # cleans 'dist' dir
+```
+
+To Build Installers
+
+```bash
+npm run dist # compiles beaker and places it in 'dist/platform-unpacked', where platform is i.e. linux, win, mac
+npm run distclean # cleans 'dist'
+npm run dist-linux # to make .deb, .appimage, and .zip
+npm run dist-win # to make .exe and .zip
+npm run dist-mac # to make .dmg and .app
 ```
 
 If you pull latest from the repo and get weird module errors, do:
@@ -78,9 +95,11 @@ Anyone can file an expense. If the expense makes sense for the development of th
 
 ## Questions
 
-If you have any questions, create an [issue](https://github.com/beakerbrowser/beaker/issues) (protip: do a quick search first to see if someone else didn't ask the same question before!).
+If you have any questions, create an [issue](https://github.com/Alex313031/beaker-ng/issues) (protip: do a quick search first to see if someone else didn't ask the same question before!).
 
-You can also reach us at [@BeakerBrowser](https://twitter.com/beakerbrowser) on Twitter, in #beakerbrowser on freenode, or hello@beaker.opencollective.com.
+~~You can also reach us at [@BeakerBrowser](https://twitter.com/beakerbrowser) on Twitter, in #beakerbrowser on freenode, or hello@beaker.opencollective.com.~~
+
+You can reach me at Alex313031@gmail.com
 
 ## Credits
 

@@ -8,7 +8,7 @@ a {
   cursor: pointer;
 }
 body {
-  background: #fff;
+  background: #ddd;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", Ubuntu, Cantarell, "Oxygen Sans", "Helvetica Neue", sans-serif;
 }
@@ -17,8 +17,8 @@ body {
   cursor: pointer;
   color: #777;
   border-radius: 2px;
-  background: #fafafa;
-  border: 1px solid #ddd;
+  background: #ddd;
+  border: 1px solid #777;
   font-size: 12px;
   font-weight: 500;
   height: 25px;
@@ -39,7 +39,7 @@ body {
 }
 .btn:hover {
   text-decoration: none;
-  background: #f0f0f0;
+  background: #fff;
 }
 .btn.disabled,
 .btn:disabled {
@@ -56,7 +56,7 @@ body {
   -webkit-font-smoothing: antialiased;
   font-weight: 800;
   background: #007aff;
-  color: #fff;
+  color: #777;
   border: none;
   transition: background .1s ease;
 }
@@ -136,7 +136,7 @@ li:last-child {
   align-items: flex-start;
   margin-top: 30px;
   padding-top: 10px;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #777;
 }
 `
 

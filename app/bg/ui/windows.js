@@ -1,4 +1,4 @@
-import {app, BrowserWindow, ipcMain, webContents, dialog, nativeTheme} from 'electron'
+import {app, BrowserWindow, ipcMain, webContents, dialog, nativeTheme, webFrame} from 'electron'
 import {defaultBrowsingSessionState, defaultWindowState} from './default-state'
 import SessionWatcher, { getLastRecordedPositioning } from './session-watcher'
 import jetpack from 'fs-jetpack'
@@ -26,9 +26,11 @@ import { getEnvVar } from '../lib/env'
 import _pick from 'lodash.pick'
 import * as logLib from '../logger'
 const logger = logLib.child({category: 'browser'})
+import * as electronLog from 'electron-log'
 
 const IS_WIN = process.platform === 'win32'
 const IS_LINUX = process.platform === 'linux'
+const IS_MAC = process.platform === 'darwin'
 const subwindows = {
   locationBar: locationBarSubwindow,
   menu: shellMenusSubwindow,
@@ -51,7 +53,7 @@ var focusedDevtoolsHost
 var hasFirstWindowLoaded = false
 var isTabSwitcherActive = {} // map of {[window.id] => Boolean}
 var windowAddedSettings = {} // map of {[window.id] => Object}
-const BROWSING_SESSION_PATH = './shell-window-state.json'
+export const BROWSING_SESSION_PATH = './shell-window-state.json'
 export const ICON_PATH = path.join(__dirname, (process.platform === 'win32') ? './assets/img/logo.ico' : './assets/img/logo.png')
 export const PRELOAD_PATH = path.join(__dirname, 'fg', 'shell-window', 'index.build.js')
 
@@ -66,6 +68,8 @@ export async function setup () {
   var customStartPage = await settingsDb.get('custom_start_page')
   var isTestDriverActive = !!getEnvVar('BEAKER_TEST_DRIVER')
   var isOpenUrlEnvVar = !!getEnvVar('BEAKER_OPEN_URL')
+  // Temporary workaround for tab restoration
+  var runBackground = await settingsDb.get('run_background')
 
   // set up app events
   app.on('activate', () => {
@@ -76,8 +80,11 @@ export async function setup () {
   ipcMain.on('new-window', () => createShellWindow())
   app.on('custom-window-all-closed', async () => {
     if (process.platform !== 'darwin') {
-      var runBackground = await settingsDb.get('run_background')
-      if (runBackground != 1) {
+      // Temporary fix for tab restoration not working. See tabmanager and settings history to try to fix
+      //var runBackground = await settingsDb.get('run_background')
+      if (runBackground !== 1) {
+        //sessionWatcher.stopRecording()
+        //sessionWatcher.exit()
         app.quit()
       }
     }
@@ -181,9 +188,9 @@ export function createShellWindow (windowState, createOpts = {dontInitPages: fal
   }
   // create window
   let state = ensureVisibleOnSomeDisplay(Object.assign({}, defaultWindowState(), lastWindowPositioning(), windowState))
-  var { x, y, width, height, minWidth, minHeight } = state
+  var { x, y, width, height } = state
   var frameSettings = {
-    titleBarStyle: 'hidden',
+    titleBarStyle: 'hiddenInset',
     trafficLightPosition: {x: 12, y: 20},
     frame: IS_LINUX || IS_WIN,
     title: undefined
@@ -191,22 +198,28 @@ export function createShellWindow (windowState, createOpts = {dontInitPages: fal
   var win = new BrowserWindow(Object.assign({
     autoHideMenuBar: false,
     fullscreenable: true,
+    resizable: true,
+    maximizable: true,
     fullscreenWindowTitle: true,
     alwaysOnTop: state.isAlwaysOnTop,
     x,
     y,
     width,
     height,
-    minWidth,
-    minHeight,
+    minWidth: 400,
+    minHeight: 300,
     backgroundColor: '#fff',
     webPreferences: {
       preload: PRELOAD_PATH,
       defaultEncoding: 'utf-8',
       nodeIntegration: false,
       contextIsolation: false,
+      experimentalFeatures: true,
+      devTools: true,
+      worldSafeExecuteJavaScript: true,
       webviewTag: false,
       sandbox: true,
+      plugins: true,
       webSecurity: false, // disable same-origin-policy in the shell window, webviews have it restored
       // enableRemoteModule: false, TODO would prefer this were true, but shell window needs this to get the webviews' webContents IDs -prf
       allowRunningInsecureContent: false,
@@ -321,6 +334,8 @@ export function createShellWindow (windowState, createOpts = {dontInitPages: fal
     // on ubuntu, the maximize/unmaximize animations require multiple resizings
     setTimeout(() => tabManager.resize(win), 250)
     setTimeout(() => tabManager.resize(win), 500)
+    tabManager.emitReplaceState(win)
+    win.emit('resize')
   }
   win.on('maximize', onMaxChange)
   win.on('unmaximize', onMaxChange)
@@ -547,7 +562,7 @@ function onEscape (win) {
 function globalTabSwitcherKeyHandler (e, input) {
   var win = getActiveWindow()
 
-  if (input.type === 'keyDown' && input.key === 'Tab' && input.control) {
+  if (input.type === 'keyDown' && input.key === 'Meta' && input.control) {
     if (!isTabSwitcherActive[win.id]) {
       isTabSwitcherActive[win.id] = true
       tabSwitcherSubwindow.show(win)
@@ -559,6 +574,11 @@ function globalTabSwitcherKeyHandler (e, input) {
       }
     }
   } else if (isTabSwitcherActive[win.id] && input.type === 'keyUp' && input.key === 'Control') {
+    isTabSwitcherActive[win.id] = false
+    tabSwitcherSubwindow.hide(win)
+  }
+
+  if (isTabSwitcherActive[win.id] && input.type === 'mouseDown') {
     isTabSwitcherActive[win.id] = false
     tabSwitcherSubwindow.hide(win)
   }

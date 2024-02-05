@@ -11,8 +11,8 @@ import css from '../css/main.css.js'
 import 'beaker://app-stdlib/js/com/img-fallbacks.js'
 
 const VERSION_ID = (major, minor, patch, pre) => major * 1e9 + minor * 1e6 + patch * 1e3 + pre
-const CURRENT_VERSION = VERSION_ID(1, 1, 0, 0)
-const RELEASE = { label: '1.1', url: 'https://beakerbrowser.com/2020/12/08/beaker-1.1.html' }
+const CURRENT_VERSION = VERSION_ID(1, 2, 4, 0)
+const RELEASE = { label: '1.2.4', url: 'https://github.com/Alex313031/beaker-ng/blob/master/CHANGELOG.md' }
 
 class DesktopApp extends LitElement {
   static get properties () {
@@ -65,7 +65,7 @@ class DesktopApp extends LitElement {
       <div id="topright">
         <a href="#" @click=${this.onClickNewHyperdrive}>+ New Hyperdrive</a>
         <a href="beaker://library/" title="Library">My Library</a>
-        <a href="https://docs.beakerbrowser.com/" title="Help">Help</a>
+        <a class="last" href="https://beaker-browser.gitbook.io/" title="Help">Help</a>
       </div>
       ${this.renderSupportBanner()}
       <main>
@@ -82,24 +82,16 @@ class DesktopApp extends LitElement {
     if (localStorage.hasDismissedSupportBanner) {
       return ''
     }
-    return html`
-      <div id="support-banner">
-        <a href="https://www.patreon.com/paul_maf_and_andrew" title="Support Beaker" target="_blank">
-          <span class="far fa-fw fa-heart"></span>
-          Support Beaker through Patreon and help us build peer-to-peer software!
-        </a>
-        <a class="dismiss" href="#" @click=${this.onCloseSupportBanner}><span class="fas fa-times"></span></a>
-      </div>
-    `
+    return ''
   }
 
   renderReleaseNotice () {
-    if (this.lastDismissedReleaseNotice >= CURRENT_VERSION) {
-      return ''
-    }
+    // if (this.lastDismissedReleaseNotice >= CURRENT_VERSION) {
+      // return ''
+    // }
     return html`
       <div class="release-notice">
-        <a href=${RELEASE.url} class="view-release-notes" target="_blank">
+        <a href=${RELEASE.url} class="view-release-notes ntp" target="_blank">
           <span class="fas fa-fw fa-rocket"></span>
           <strong>Welcome to Beaker ${RELEASE.label}!</strong>
           Click here to see what's new.

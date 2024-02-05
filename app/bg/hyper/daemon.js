@@ -1,7 +1,7 @@
 import { app } from 'electron'
 import * as os from 'os'
 import * as p from 'path'
-import { promises as fs } from 'fs'
+import { promises as fs } from 'fs/promises'
 import * as childProcess from 'child_process'
 import HyperdriveClient from 'hyperdrive-daemon-client'
 import datEncoding from 'dat-encoding'

@@ -3,14 +3,14 @@ const path = require('path');
 var electron_notarize = require('electron-notarize');
 
 module.exports = async function (params) {
-    // Only notarize the app on Mac OS only.
+    // Only notarize the app on Mac OS.
     if (process.platform !== 'darwin') {
         return;
     }
     console.log('afterSign hook triggered', params);
 
     // Same appId in electron-builder.
-    let appId = 'com.bluelinklabs.beaker-browser'
+    let appId = 'com.alex313031.beaker-ng'
 
     let appPath = path.join(params.appOutDir, `${params.packager.appInfo.productFilename}.app`);
     if (!fs.existsSync(appPath)) {

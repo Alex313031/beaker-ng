@@ -80,18 +80,20 @@ export async function setup () {
   // default pinned bookmarks
   if (isInitialCreation) {
     await rootDrive.pda.mkdir('/bookmarks')
-    await rootDrive.pda.writeFile(`/bookmarks/patreon-com-paul_maf_and_andrew.goto`, '', {metadata: {href: 'https://patreon.com/paul_maf_and_andrew', title: 'Support Beaker'}})
-    await rootDrive.pda.writeFile(`/bookmarks/beaker-dev-docs-templates.goto`, '', {metadata: {href: 'https://beaker.dev/docs/templates/', title: 'Hyperdrive Templates'}})
     await rootDrive.pda.writeFile(`/bookmarks/twitter.goto`, '', {metadata: {href: 'https://twitter.com/', title: 'Twitter'}})
-    await rootDrive.pda.writeFile(`/bookmarks/reddit.goto`, '', {metadata: {href: 'https://reddit.com/', title: 'Reddit'}})
-    await rootDrive.pda.writeFile(`/bookmarks/youtube.goto`, '', {metadata: {href: 'https://youtube.com/', title: 'YouTube'}})
+    await rootDrive.pda.writeFile(`/bookmarks/reddit.goto`, '', {metadata: {href: 'https://www.reddit.com/', title: 'Reddit'}})
+    await rootDrive.pda.writeFile(`/bookmarks/youtube.goto`, '', {metadata: {href: 'https://www.youtube.com/', title: 'YouTube'}})
+    await rootDrive.pda.writeFile(`/bookmarks/wikipedia.goto`, '', {metadata: {href: 'https://www.wikipedia.org/', title: 'Wikipedia'}})
+    await rootDrive.pda.writeFile(`/bookmarks/beaker-docs.goto`, '', {metadata: {href: 'https://thorium.rocks/docs.beakerbrowser.com/', title: 'Beaker-ng Docs'}})
+    await rootDrive.pda.writeFile(`/bookmarks/beaker-dev-docs-templates.goto`, '', {metadata: {href: 'https://web.archive.org/web/20201207035342/https://beaker.dev/docs/templates/', title: 'Hyperdrive Templates'}})
     await rootDrive.pda.mkdir('/beaker')
     await rootDrive.pda.writeFile(`/beaker/pins.json`, JSON.stringify([
-      'https://patreon.com/paul_maf_and_andrew',
-      'https://beaker.dev/docs/templates/',
       'https://twitter.com/',
-      'https://reddit.com/',
-      'https://youtube.com/'
+      'https://www.reddit.com/',
+      'https://www.youtube.com/',
+      'https://www.wikipedia.org/',
+      'https://thorium.rocks/docs.beakerbrowser.com/',
+      'https://web.archive.org/web/20201207035342/https://beaker.dev/docs/templates/'
     ], null, 2))
   }
   

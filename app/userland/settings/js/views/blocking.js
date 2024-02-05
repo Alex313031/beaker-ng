@@ -34,11 +34,13 @@ class BlockingSettingsView extends LitElement {
   // =
 
   render () {
+  document.title = "Settings - AdBlock";
+
     if (!this.browserInfo) return html``
     return html`
       <link rel="stylesheet" href="beaker://assets/font-awesome.css">
       <div class="form-group">
-        <h2>Adblock Filter Lists</h2>
+        <h2>AdBlock Filter Lists</h2>
         ${this.renderAdblockFilterLists()}
       </div>
     `

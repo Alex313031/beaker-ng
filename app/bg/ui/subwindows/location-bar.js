@@ -29,6 +29,8 @@ export function setup (parentWindow) {
   var view = views[id] = new BrowserView({
     webPreferences: {
       defaultEncoding: 'utf-8',
+      contextIsolation: false,
+      worldSafeExecuteJavaScript: true,
       preload: path.join(__dirname, 'fg', 'location-bar', 'index.build.js')
     }
   })

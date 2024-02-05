@@ -41,6 +41,8 @@ import * as datProtocol from './bg/protocols/dat'
 
 import * as testDriver from './bg/test-driver'
 import * as openURL from './bg/open-url'
+import * as settingsDb from './bg/dbs/settings'
+import * as electronLog from 'electron-log'
 
 // setup
 // =
@@ -56,14 +58,69 @@ if (getEnvVar('BEAKER_USER_DATA_PATH')) {
 if (getEnvVar('BEAKER_TEST_DRIVER')) {
   testDriver.setup()
 }
-process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = '1' // we know, we know
+
+// we know, we know
+//delete process.env.ELECTRON_ENABLE_SECURITY_WARNINGS;
+process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true;
+//process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = '1'
 
 // enable the sandbox
 app.enableSandbox()
 
+// Needed for Electron <13 on Linux
+// app.commandLine.appendSwitch('no-sandbox');
+// Needed for Electron <13 on Linux
+//app.commandLine.appendSwitch('disable-gpu-sandbox');
+// Including new Canvas2D APIs
+app.commandLine.appendSwitch('new-canvas-2d-api');
+// These two allow easier local web development
+// Allow file:// URIs to read other file:// URIs
+app.commandLine.appendSwitch('allow-file-access-from-files');
+// Enable local DOM to access all resources in a tree
+app.commandLine.appendSwitch('enable-local-file-accesses');
+// Enable QUIC for faster handshakes
+app.commandLine.appendSwitch('enable-quic');
+// Enable inspecting ALL layers
+app.commandLine.appendSwitch('enable-ui-devtools');
+// Force enable GPU acceleration
+app.commandLine.appendSwitch('ignore-gpu-blocklist');
+// Force enable GPU rasterization
+app.commandLine.appendSwitch('enable-gpu-rasterization');
+// Enable Zero Copy for GPU memory associated with Tiles
+app.commandLine.appendSwitch('enable-zero-copy');
+// Inform GPU process that GPU context will not be lost in power saving modes
+// Useful for fixing blank or pink screens/videos upon system resume, etc
+app.commandLine.appendSwitch('gpu-no-context-lost');
+// Enable all WebGL Features
+app.commandLine.appendSwitch('enable-webgl-draft-extensions');
+// Transparent overlays for Promethium UI
+app.commandLine.appendSwitch('enable-transparent-visuals');
+
+// Enable native CPU-mappable GPU memory buffer support on Linux
+if (process.platform === 'linux') {
+  app.commandLine.appendSwitch('enable-native-gpu-memory-buffers');
+}
+
+// Enable useful features
+if (process.platform === 'linux') {
+  app.commandLine.appendSwitch(
+  'enable-features','CanvasOopRasterization,CSSColorSchemeUARendering,ImpulseScrollAnimations,ParallelDownloading,Portals,StorageBuckets,JXL,VaapiVideoDecoder,VaapiVideoEncoder',
+  );
+}
+// VAAPI is only applicable on linux so copy above without vaapi flags
+if (process.platform === 'win32' || process.platform === 'darwin') {
+  app.commandLine.appendSwitch(
+  'enable-features','CanvasOopRasterization,CSSColorSchemeUARendering,ImpulseScrollAnimations,ParallelDownloading,Portals,StorageBuckets,JXL',
+  );
+}
+
+if (process.env.NODE_ENV === 'development') {
+  app.commandLine.appendSwitch('remote-debugging-port', '9222');
+}
+
 // HACK fix for cors in custom protocols
-// see https://github.com/electron/electron/issues/20730
-app.commandLine.appendSwitch('disable-features', 'OutOfBlinkCors')
+// See https://github.com/electron/electron/issues/20730
+app.commandLine.appendSwitch('disable-features', 'OutOfBlinkCors');
 
 // enable process reuse to speed up navigations
 // see https://github.com/electron/electron/issues/18397
@@ -98,8 +155,9 @@ app.on('ready', async function () {
     homePath: app.getPath('home')
   }
 
+  console.log('Welcome to Beaker Browser!')
   await logger.setup(join(commonOpts.userDataPath, 'beaker.log'))
-  log.info('Welcome to Beaker')
+  log.info('Starting Beaker')
   beakerProtocol.register(protocol)
   webapis.setup()
   initWindow.open()
@@ -158,6 +216,11 @@ app.on('ready', async function () {
   dbs.settings.on('set:browser_theme', v => {
     nativeTheme.themeSource = v
   })
+
+  var doNotTrack = await settingsDb.get('do_not_track')
+  var globalPrivacyControl = await settingsDb.get('global_privacy_control')  
+  electronLog.info('Do Not Track Setting: [ bool =', doNotTrack, ']')
+  electronLog.info('GPC Setting: [ bool =', globalPrivacyControl, ']')
 })
 
 app.on('window-all-closed', () => {

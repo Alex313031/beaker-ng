@@ -1267,6 +1267,7 @@ rpc.exportAPI('background-process-views', viewsRPCManifest, {
       { label: 'Close Tabs to the Right', click: () => removeAllToRightOf(win, tab) },
       { type: 'separator' },
       { label: 'New Tab', click: () => create(win, null, {setActive: true}) },
+      { label: 'New Tab to the Right', click: () => create(win, null, {setActive: true, adjacentActive: true}) },
       { label: 'Reopen Closed Tab', click: () => reopenLastRemoved(win) }
     ])
     menu.popup()
@@ -1404,8 +1405,9 @@ function emitUpdateState (tab) {
   if (!tab.browserWindow) return
   var win = getTopWindow(tab.browserWindow)
   var index = typeof tab === 'number' ? tab : getAll(win).indexOf(tab)
+  // Temporary fix
   if (index === -1) {
-    console.warn('WARNING: attempted to update state of a tab not on the window')
+    //console.warn('WARNING: attempted to update state of a tab not on the window')
     return
   }
   emit(win, 'update-state', {index, state: tab.state})

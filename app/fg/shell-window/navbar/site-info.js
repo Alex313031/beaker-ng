@@ -132,8 +132,8 @@ NavbarSiteInfo.styles = [buttonResetCSS, css`
 
 button {
   border-radius: 0;
-  border-top-left-radius: 16px;
-  border-bottom-left-radius: 16px;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
   height: 26px;
   line-height: 27px;
   padding: 0 12px 0 10px;
@@ -145,7 +145,7 @@ button {
 }
 
 :host([autocomplete-open]) button {
-  border-top-left-radius: 12px;
+  border-top-left-radius: 4px;
   border-bottom-left-radius: 0;
 }
 

@@ -1,0 +1,128 @@
+{
+  "productName": "Beaker Browser",
+  "afterSign": "./afterSignHook.js",
+  "appId": "com.alex313031.beaker-ng",
+  "asar": false,
+  "asarUnpack": [
+    "./fg/json-renderer/index.build.js",
+    "./fg/syntax-highlighter/index.js",
+    "./node_modules/@beaker/dat-legacy-tools/**",
+    "./node_modules/sodium-native/**",
+    "./node_modules/hyperdrive-daemon/**"
+  ],
+  "electronVersion": "13.6.9",
+  "electronDownload": {
+    "version": "13.6.9",
+    "isVerifyChecksum": false,
+    "cache": "electron/bin",
+    "mirror": "https://github.com/Alex313031/electron-13.6.9/releases/download/v"
+  },
+  "copyright": "© 2023 Alex313031 & Blue Link Labs",
+  "directories": {
+    "app": "../app",
+    "buildResources": "../build",
+    "output": "../dist"
+  },
+  "extraFiles": [
+    {
+      "from": "../build/README.txt"
+    },
+    {
+      "from": "../Logo.png"
+    }
+  ],
+  "npmRebuild": false,
+  "protocols": [
+    {
+      "name": "URL",
+      "schemes": [
+        "http",
+        "https"
+      ]
+    },
+    {
+      "name": "hyper",
+      "schemes": [
+        "hyper"
+      ]
+    },
+    {
+      "name": "dat",
+      "schemes": [
+        "dat"
+      ]
+    }
+  ],
+  "fileAssociations": [
+    {
+    "name": "Document",
+    "description": "Beaker Browser",
+    "role": "Viewer",
+    "ext": "html"
+    }
+  ],
+  "linux": {
+    "target": [
+      "zip",
+      "AppImage",
+      "deb"
+    ],
+    "maintainer": "Alex313031",
+    "vendor": "Alex313031",
+    "synopsis": "An Experimental Peer-to-Peer Web Browser.",
+    "category": "Network;WebBrowser;",
+    "executableName": "beaker-browser",
+    "artifactName": "Beaker_Browser_${version}_${arch}.${ext}",
+    "desktop": {
+      "Name": "Beaker Browser",
+      "GenericName": "Web Browser",
+      "StartupWMClass": "beaker-browser",
+      "Keywords": "electron;webview;browser;beaker;",
+      "Icon": "beaker-browser"
+    }
+  },
+  "deb": {
+    "artifactName": "beaker-browser_${version}_${arch}.${ext}",
+  },
+  "appImage": {
+    "category": "Network",
+    "artifactName": "Beaker_Browser_${version}_${arch}.${ext}",
+    "desktop": {
+      "Name": "Beaker Browser",
+      "GenericName": "Web Browser",
+      "Type": "Application",
+      "Terminal": false,
+      "MimeType": "text/html;text/xml;application/xhtml+xml;application/xml;application/rss+xml;application/rdf+xml;image/gif;image/jpeg;image/png;x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/hyper;x-scheme-handler/dat;video/webm;application/x-xpinstall;",
+      "Categories": "Network;WebBrowser;"
+    }
+  },
+  "win": {
+    "target": [
+      "zip",
+      "nsis"
+    ],
+    "publisherName": "Alex313031",
+    "executableName": "Beaker",
+    "artifactName": "Beaker_win64_${version}_${arch}.${ext}"
+  },
+  "nsis": {
+    "shortcutName": "Beaker Browser",
+    "artifactName": "Beaker_Setup_${version}_${arch}.${ext}",
+    "deleteAppDataOnUninstall": false,
+    "uninstallDisplayName": "Beaker Browser ${version}"
+  },
+  "mac": {
+    "category": "public.app-category.productivity",
+    "hardenedRuntime": true,
+    "type": "distribution",
+    "entitlements": "../build/entitlements.plist",
+    "entitlementsInherit": "../build/entitlements.plist",
+    "extendInfo": {
+      "NSCameraUsageDescription": "This app requires camera access to record video.",
+      "NSMicrophoneUsageDescription": "This app requires microphone access to record audio."
+    }
+  },
+  "publish": {
+    "provider": "github"
+  }
+}

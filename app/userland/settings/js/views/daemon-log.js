@@ -38,10 +38,13 @@ class DaemonLogView extends LitElement {
   // =
 
   render () {
+  document.title = "Settings - Daemon Log";
+
     if (!this.rows) {
       return html`
         <link rel="stylesheet" href="beaker://assets/font-awesome.css">
         <div class="logger loading">Loading...</div>
+        <div class="empty"><div><span class="fas fa-toolbox"></span></div>Under Construction</div>
       `
     }
 

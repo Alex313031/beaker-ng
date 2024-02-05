@@ -58,7 +58,9 @@ npm install name_of_npm_module --save
 To make ready for distribution installer use command:
 ```
 cd scripts
-npm run release
+npm run dist-linux # to make .deb, .appimage, and .zip
+npm run dist-win # to make .exe and .zip
+npm run dist-mac # to make .dmg and .app
 ```
 It will start the packaging process for operating system you are running this command on. Ready for distribution file will be outputted to `dist` directory.
 

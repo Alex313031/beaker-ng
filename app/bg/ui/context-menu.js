@@ -174,7 +174,7 @@ export default function registerContextMenu () {
         var searchEngines = await settingsDb.get('search_engines')
         var searchEngine = searchEngines.find(se => se.selected) || searchEngines[0]
         var query = searchEngine.url+ '?q=' + encodeURIComponent(props.selectionText.substr(0, 500)) // Limit query to prevent too long query error from DDG
-        menuItems.push({ label: 'Search ' + searchEngine.name + ' for "' + searchPreviewStr, click: (item, win) => tabManager.create(win, query, {adjacentActive: true}) })
+        menuItems.push({ label: 'Search ' + searchEngine.name + ' for "' + searchPreviewStr, click: (item, win) => tabManager.create(win, query, {setActive: true, adjacentActive: true}) })
         menuItems.push({ type: 'separator' })
       }
 

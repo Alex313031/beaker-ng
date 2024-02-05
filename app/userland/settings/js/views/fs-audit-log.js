@@ -42,6 +42,8 @@ class FsAuditLogView extends LitElement {
   // =
 
   render () {
+  document.title = "Settings - FS Audit Log";
+
     if (!this.rows) {
       return html`
         <link rel="stylesheet" href="beaker://assets/font-awesome.css">

@@ -67,6 +67,8 @@ class NetworkView extends LitElement {
   // =
 
   render () {
+  document.title = "Settings - Hyperdrive Stats";
+
     return html`
       <link rel="stylesheet" href="beaker://assets/font-awesome.css">
       <h3>Active Drives</h3>

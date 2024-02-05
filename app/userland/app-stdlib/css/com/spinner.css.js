@@ -6,7 +6,7 @@ const cssStr = css`
   height: 14px;
   width: 14px;
   animation: rotate 1s infinite linear;
-  color: #aaa;
+  color: #5746FF;
   border: 2px solid;
   border-right-color: transparent;
   border-radius: 50%;

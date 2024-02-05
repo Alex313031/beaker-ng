@@ -95,13 +95,15 @@ class LocationBar extends LitElement {
           </div>
           <div class="list">
             ${searchLink('Beaker', `beaker://desktop/?q=${encodeURIComponent(this.query)}`)}
-            ${searchLink('Twitter', `https://twitter.com/search?q=${encodeURIComponent(this.query)}`)}
-            ${searchLink('Reddit', `https://reddit.com/search?q=${encodeURIComponent(this.query)}`)}
-            ${searchLink('GitHub', `https://github.com/search?q=${encodeURIComponent(this.query)}`)}
-            ${searchLink('DuckDuckGo', `https://duckduckgo.com?q=${encodeURIComponent(this.query)}`)}
             ${searchLink('Google', `https://google.com/search?q=${encodeURIComponent(this.query)}`)}
-            ${searchLink('YouTube', `https://www.youtube.com/results?search_query=${encodeURIComponent(this.query)}`)}
+            ${searchLink('DuckDuckGo', `https://duckduckgo.com?q=${encodeURIComponent(this.query)}`)}
+            ${searchLink('Ecosia', `https://www.ecosia.org/search?q=${encodeURIComponent(this.query)}`)}
+            ${searchLink('Brave', `https://search.brave.com/search?q=${encodeURIComponent(this.query)}`)}
             ${searchLink('Wikipedia', `https://en.wikipedia.org/w/index.php?search=${encodeURIComponent(this.query)}`)}
+            ${searchLink('YouTube', `https://www.youtube.com/results?search_query=${encodeURIComponent(this.query)}`)}
+            ${searchLink('GitHub', `https://github.com/search?q=${encodeURIComponent(this.query)}`)}
+            ${searchLink('Reddit', `https://reddit.com/search?q=${encodeURIComponent(this.query)}`)}
+            ${searchLink('Twitter', `https://twitter.com/search?q=${encodeURIComponent(this.query)}`)}
             ${''/* TODO restore at some point esearchLink('Beaker', `beaker://search/?q=${encodeURIComponent(this.query)}`) */}
           </div>
         </div>
@@ -215,8 +217,8 @@ class LocationBar extends LitElement {
 LocationBar.styles = [css`
 .wrapper {
   background: var(--bg-color--default);
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
   color: var(--text-color--default);
 }
 
@@ -305,8 +307,8 @@ LocationBar.styles = [css`
 }
 
 .search-engines {
-  border-bottom-left-radius: 16px;
-  border-bottom-right-radius: 16px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
 }
 
 .search-engines .label {
@@ -321,7 +323,7 @@ LocationBar.styles = [css`
 }
 
 .search-engines .list a {
-  border-radius: 50%;
+  border-radius: 25%;
   flex: 0 0 42px;
   text-align: center;
   padding: 8px 0;

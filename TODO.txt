@@ -1,0 +1,13 @@
+----TODO----
+
+Fix webterm env parsing
+Fix tab restore for staying open in background
+Update error page // partially complete
+Update tabstrip and button CSS // partially complete
+Add GPU acceleration toggle in settings
+
+------------Notes-----------------
+main accent color:
+#5746FF
+
+python3 -m castlabs_evs.vmp sign-pkg out\win-unpacked

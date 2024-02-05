@@ -35,15 +35,23 @@ h1 strong {
 </style>
 <h1><strong>License</strong></h1>
 <div class="license">
-  <p>Beaker is provided by Blue Link Labs, Inc.</p>
+  <p>
+  Beaker is maintained by Alex313031.
+  <br/>
+  Beaker was originally provided by Blue Link Labs, Inc.
+  </p>
   <ul>
     <li>Beaker Browser is distributed under the MIT license.</li>
     <li>You are personally responsible for the content you share.</li>
     <li>Your IP address is publicly available while using Beaker Browser.</li>
-    <li>We collect anonymized usage statistics if you don't opt out.</li>
   </ul>
   <h2>MIT License</h2>
-  <p>Copyright (c) 2018 Blue Link Labs</p>
+  <p>Copyright (c) 2023 Alex313031
+  <br/>
+  Copyright (c) 2019 Paul Frazee
+  <br/>
+  Copyright (c) 2018 Blue Link Labs
+  </p>
   <p>Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights

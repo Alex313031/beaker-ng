@@ -32,17 +32,30 @@ input:focus {
   top: 10px;
   right: 10px;
   z-index: 101;
+  background-image: none !important;
+  background: var(--bg-color--default) !important;
+  background-color: var(--bg-color--default) !important;
 }
 
 #topright a {
   margin-left: 10px;
   font-size: 12px;
   opacity: 0.85;
+  background-image: none !important;
+  background: var(--bg-color--default) !important;
+  background-color: var(--bg-color--default) !important;
+}
+
+#topright a.last {
+  margin-right: 10px;
 }
 
 #topright a span {
   opacity: 0.8;
   font-size: 11px;
+  background-image: none !important;
+  background: var(--bg-color--default) !important;
+  background-color: var(--bg-color--default) !important;
 }
 
 #support-banner {
@@ -63,10 +76,16 @@ input:focus {
 }
 
 .release-notice {
-  width: 100%;
+  width: 46%;
   font-size: 14px;
   letter-spacing: 0.5px;
   text-align: center;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  background-image: none !important;
+  background: var(--bg-color--default) !important;
+  background-color: var(--bg-color--default) !important;
 }
 
 .release-notice .view-release-notes:hover {
@@ -113,6 +132,7 @@ header {
 
 .pin:hover {
   text-decoration: none;
+  top: -2px;
 }
 
 .pin .thumb {

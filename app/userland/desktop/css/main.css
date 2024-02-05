@@ -8,6 +8,11 @@ body {
 
   font-size: 13px;
   background: var(--bg-color--default);
+  background-image: url('/assets/start/pink_clouds.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   color: var(--text-color--default);
 }
 
@@ -16,5 +21,6 @@ body {
     --border-color--focused: #7599ff;
     --text-color--nav--highlight: #bbc;
     --bg-color--nav-count: #E91E63;
+    background-image: url('/assets/start/Carl_Kleiner_Dark_Material.jpg');
   }
 }

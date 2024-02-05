@@ -1,6 +1,7 @@
 import EventEmitter from 'events'
 import sqlite3 from 'sqlite3'
 import path from 'path'
+import fs from 'fs'
 import { cbPromise } from '../../lib/functions'
 import { setupSqliteDB } from '../lib/db'
 import { getEnvVar } from '../lib/env'
@@ -34,29 +35,33 @@ export const setup = async function (opts) {
   setupPromise = setupSqliteDB(db, {migrations}, '[SETTINGS]')
 
   defaultSettings = {
-    auto_update_enabled: 1,
+    auto_update_enabled: 0,
     auto_redirect_to_dat: 1,
-    custom_start_page: 'blank',
+    custom_start_page: 'previous',
     new_tab: 'beaker://desktop/',
     new_tabs_in_foreground: 0,
-    run_background: 1,
+    run_background: 0,
     default_zoom: 0,
-    browser_theme: 'system',
-    analytics_enabled: 1,
+    browser_theme: 'dark',
+    analytics_enabled: 0,
+    do_not_track: 1,
+    global_privacy_control: 1,
     extended_network_index: 'default',
     extended_network_index_url: '',
     search_engines: [
-      {name: 'DuckDuckGo', url: 'https://www.duckduckgo.com/', selected: true},
-      {name: 'Beaker', url: 'beaker://desktop/'},
-      {name: 'Google', url: 'https://www.google.com/search'}
+      {name: 'Google', url: 'https://www.google.com/search', selected: true},
+      {name: 'DuckDuckGo', url: 'https://www.duckduckgo.com/'},
+      {name: 'Ecosia', url: 'https://www.ecosia.org/search'},
+      {name: 'Brave', url: 'https://search.brave.com/search'},
+      {name: 'Beaker', url: 'beaker://desktop/'}
     ],
     adblock_lists: [
       {name: 'EasyList', url: 'https://easylist.to/easylist/easylist.txt', selected: true},
-      {name: 'EasyPrivacy', url: 'https://easylist.to/easylist/easyprivacy.txt'},
-      {name: 'EasyList Cookie List', url: 'https://easylist-downloads.adblockplus.org/easylist-cookie.txt'},
-      {name: 'Fanboy\'s Social Blocking List', url: 'https://easylist.to/easylist/fanboy-social.txt'},
-      {name: 'Fanboy\'s Annoyance List', url: 'https://easylist.to/easylist/fanboy-annoyance.txt'},
-      {name: 'Adblock Warning Removal List', url: 'https://easylist-downloads.adblockplus.org/antiadblockfilters.txt'},
+      {name: 'EasyPrivacy', url: 'https://easylist.to/easylist/easyprivacy.txt', selected: true},
+      {name: 'EasyList Cookie List', url: 'https://easylist-downloads.adblockplus.org/easylist-cookie.txt', selected: true},
+      {name: 'Fanboy\'s Social Blocking List', url: 'https://easylist.to/easylist/fanboy-social.txt', selected: true},
+      {name: 'Fanboy\'s Annoyance List', url: 'https://easylist.to/easylist/fanboy-annoyance.txt', selected: true},
+      {name: 'Adblock Warning Removal List', url: 'https://easylist-downloads.adblockplus.org/antiadblockfilters.txt', selected: true},
     ]
   }
 

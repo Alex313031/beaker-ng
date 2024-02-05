@@ -76,6 +76,25 @@ a:hover {
   border-bottom: 1px solid var(--border-color--semi-light);
 }
 
+.info h2 {
+  margin: 0;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color--semi-light);
+}
+
+p.info {
+  padding-bottom: 1em;
+  border-bottom: 1px solid var(--border-color--semi-light);
+}
+
+p.ver {
+  padding-bottom: 8px;
+}
+
+.chromeurls li {
+  font-size: 14px;
+}
+
 .message {
   margin: 1em 0;
   background: var(--bg-color--message);

@@ -134,6 +134,9 @@ async function beakerProtocol (request, respond) {
   if (requestUrl === 'beaker://assets/font-awesome.css') {
     return cb(200, 'OK', 'text/css; charset=utf-8', path.join(__dirname, 'assets/css/fa-all.min.css'))
   }
+  if (requestUrl === 'beaker://assets/icons.css') {
+    return cb(200, 'OK', 'text/css; charset=utf-8', path.join(__dirname, 'assets/css/icons.css'))
+  }
   if (requestUrl === 'beaker://assets/webfonts/fa-regular-400.woff2') {
     return cb(200, 'OK', 'text/css; charset=utf-8', path.join(__dirname, 'assets/fonts/fa-regular-400.woff2'))
   }
@@ -283,6 +286,9 @@ async function beakerProtocol (request, respond) {
   if (requestUrl.startsWith('beaker://assets/vs/') && requestUrl.endsWith('.ttf')) {
     let filePath = requestUrl.slice('beaker://assets/vs/'.length)
     return cb(200, 'OK', 'font/ttf', path.join(__dirname, `assets/js/editor/vs/${filePath}`))
+  }
+  if (requestUrl === 'beaker://yiff' || requestUrl.startsWith('beaker://yiff/')) {
+    return serveAppAsset(requestUrl, path.join(__dirname, 'userland', 'yiff'), cb)
   }
 
   // debugging

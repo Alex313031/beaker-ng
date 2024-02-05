@@ -95,6 +95,8 @@ class LogSettingsView extends LitElement {
   // =
 
   render () {
+  document.title = "Settings - Beaker Logs";
+
     if (!this.rows) {
       return html`
         <link rel="stylesheet" href="beaker://assets/font-awesome.css">

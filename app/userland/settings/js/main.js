@@ -4,11 +4,14 @@ import * as QP from './lib/query-params.js'
 import css from '../css/main.css.js'
 import './views/general.js'
 import './views/blocking.js'
-import './views/info.js'
-import './views/network.js'
-import './views/fs-audit-log.js'
-import './views/daemon-log.js'
 import './views/log.js'
+import './views/fs-audit-log.js'
+import './views/network.js'
+import './views/devices.js'
+import './views/internals.js'
+import './views/privacy.js'
+import './views/info.js'
+import './views/daemon-log.js'
 
 class SettingsApp extends LitElement {
   static get properties () {
@@ -63,13 +66,17 @@ class SettingsApp extends LitElement {
     return html`
       ${item('general', 'fas fa-cog', 'General')}
       ${item('blocking', 'fas fa-ban', 'Content Blocking')}
-      <hr>
-      ${item('general-logs', 'fas fa-clipboard-list', 'General Logs')}
-      ${item('network', 'fas fa-share-alt', 'Network Stats')}
-      ${item('fs-audit-log', 'fas fa-clipboard-check', 'Filesystem Audit Log')}
+      ${item('general-logs', 'fas fa-clipboard-list', 'Beaker Logs')}
+      <hr/>
+      ${item('fs-audit-log', 'fas fa-database', 'Filesystem Audit Log')}
+      ${item('network', 'fas fa-share-alt', 'Hyperdrive Stats')}
+      ${item('devices', 'fas fa-desktop', 'Devices')}
       ${''/*DISABLEDitem('daemon-log', 'fas fa-clipboard-list', 'Daemon Log')*/}
-      ${item('info', 'fas fa-info-circle', 'Information')}
-      <hr>
+      <hr/>
+      ${item('privacy', 'fas fa-shield-alt', 'Privacy')}
+      ${item('internals', 'fas fa-code', 'Internals')}
+      ${item('info', 'fas fa-info-circle', 'About')}
+      <hr/>
     `
   }
 
@@ -79,14 +86,20 @@ class SettingsApp extends LitElement {
         return html`<general-settings-view loadable></general-settings-view>`
       case 'blocking':
         return html`<blocking-settings-view loadable></blocking-settings-view>`
-      case 'info':
-        return html`<info-settings-view loadable></info-settings-view>`
-      case 'network':
-        return html`<network-view loadable></network-view>`
       case 'general-logs':
         return html`<log-settings-view loadable></log-settings-view>`
       case 'fs-audit-log':
         return html`<fs-audit-log-view loadable></fs-audit-log-view>`
+      case 'network':
+        return html`<network-view loadable></network-view>`
+      case 'devices':
+          return html`<devices-view loadable></devices-view>`
+      case 'privacy':
+          return html`<privacy-settings-view loadable></privacy-settings-view>`
+      case 'internals':
+          return html`<internals-view loadable></internals-view>`
+      case 'info':
+        return html`<info-settings-view loadable></info-settings-view>`
       case 'daemon-log':
           return html`<daemon-log-view loadable></daemon-log-view>`
       default:

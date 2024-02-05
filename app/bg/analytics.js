@@ -24,7 +24,7 @@ export function setup () {
 
 async function checkin () {
   // enabled?
-  var isEnabled = await settingsDb.get('analytics_enabled')
+  var isEnabled = 0
   if (isEnabled == 1) {
     try {
       var pingData = await readPingData()

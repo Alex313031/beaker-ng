@@ -38,6 +38,13 @@ function toHostname (v) {
   }
 }
 
+export async function listCache (name, err) {
+  // check the cache
+  var record = await datDnsDb.getCurrentByName(name)
+  if (!record) console.warn('DNS Cache record miss')
+  return record.key
+}
+
 /*
 TODO
 
@@ -69,7 +76,7 @@ datDns.resolveName = async function (name, opts, cb) {
 }
 
 // persistent cache methods
-async function read (name, err) {
+async function listCache (name, err) {
   // check the cache
   var record = await datDnsDb.getCurrentByName(name)
   if (!record) throw err

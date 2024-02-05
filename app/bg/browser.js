@@ -1,4 +1,4 @@
-import { app, dialog, BrowserWindow, webContents, ipcMain, shell, Menu, screen, session, nativeImage } from 'electron'
+import { app, dialog, BrowserWindow, webContents, ipcMain, shell, Menu, screen, session, nativeImage, webFrame } from 'electron'
 import { autoUpdater } from 'electron-updater'
 import os from 'os'
 import path from 'path'
@@ -29,6 +29,7 @@ import * as bookmarks from './filesystem/bookmarks'
 import { getDriveIdent } from './filesystem/index'
 import * as wcTrust from './wc-trust'
 import { spawnAndExecuteJs } from './lib/electron'
+import * as electronLog from 'electron-log'
 
 // constants
 // =
@@ -37,6 +38,8 @@ const IS_FROM_SOURCE = (process.defaultApp || /node_modules[\\/]electron[\\/]/.t
 const IS_LINUX = !(/^win/.test(process.platform)) && process.platform !== 'darwin'
 const DOT_DESKTOP_FILENAME = 'appimagekit-beaker-browser.desktop'
 const isBrowserUpdatesSupported = !(IS_LINUX || IS_FROM_SOURCE) // linux is temporarily not supported
+export const shell_window_state = path.join(app.getPath('userData'), 'shell-window-state.json')
+export const raw_beaker_log = path.join(app.getPath('userData'), 'beaker.log')
 
 // how long between scheduled auto updates?
 const SCHEDULED_AUTO_UPDATE_DELAY = 24 * 60 * 60 * 1e3 // once a day
@@ -120,6 +123,23 @@ export async function setup () {
     }
   })
 
+  // DoNotTrack Settings
+  var doNotTrack = await settingsDb.get('do_not_track')
+  var globalPrivacyControl = await settingsDb.get('global_privacy_control')
+  session.defaultSession.webRequest.onBeforeSendHeaders((details, cb) => {
+    if (doNotTrack == 1) {
+      details.requestHeaders['DNT'] = '1';
+    } else {
+      details.requestHeaders['DNT'] = null;
+    }
+    if (globalPrivacyControl == 1) {
+      details.requestHeaders['Sec-GPC'] = '1';
+    } else {
+      details.requestHeaders['Sec-GPC'] = null;
+    }
+    cb({ requestHeaders: details.requestHeaders });
+  })
+
   // request blocking for security purposes
   session.defaultSession.webRequest.onBeforeRequest((details, cb) => {
     if (details.url.startsWith('asset:') || details.url.startsWith('beaker:')) {
@@ -178,6 +198,21 @@ export const WEBAPI = {
   getDaemonNetworkStatus,
   checkForUpdates,
   restartBrowser,
+  openChromeAccessibilityUrl,
+  openChromeBlobUrl,
+  openChromeDinoUrl,
+  openChromeGpuUrl,
+  openChromeHistogramsUrl,
+  openChromeIndexDbUrl,
+  openChromeMediaUrl,
+  openChromeNetErrorsUrl,
+  openChromeProcessesUrl,
+  openChromeServiceWorkerUrl,
+  openChromeTracingUrl,
+  openChromeUkmUrl,
+  openChromeWebRtcUrl,
+  viewShellState,
+  viewBeakerLog,
 
   getSetting,
   getSettings,
@@ -479,24 +514,27 @@ export async function getDefaultProtocolSettings () {
     // we can just use xdg-mime directly instead
     // see https://github.com/beakerbrowser/beaker/issues/915
     // -prf
-    let [httpHandler, hyperHandler, datHandler] = await Promise.all([
+    let [httpHandler, httpsHandler, hyperHandler, datHandler] = await Promise.all([
       // If there is no default specified, be sure to catch any error
       // from exec and return '' otherwise Promise.all errors out.
       exec('xdg-mime query default "x-scheme-handler/http"').catch(err => ''),
+      exec('xdg-mime query default "x-scheme-handler/https"').catch(err => ''),
       exec('xdg-mime query default "x-scheme-handler/hyper"').catch(err => ''),
       exec('xdg-mime query default "x-scheme-handler/dat"').catch(err => '')
     ])
     if (httpHandler && httpHandler.stdout) httpHandler = httpHandler.stdout
+    if (httpsHandler && httpsHandler.stdout) httpsHandler = httpsHandler.stdout
     if (hyperHandler && hyperHandler.stdout) hyperHandler = hyperHandler.stdout
     if (datHandler && datHandler.stdout) datHandler = datHandler.stdout
     return {
       http: (httpHandler || '').toString().trim() === DOT_DESKTOP_FILENAME,
+      https: (httpsHandler || '').toString().trim() === DOT_DESKTOP_FILENAME,
       hyper: (hyperHandler || '').toString().trim() === DOT_DESKTOP_FILENAME,
       dat: (datHandler || '').toString().trim() === DOT_DESKTOP_FILENAME
     }
   }
 
-  return Promise.resolve(['http', 'hyper', 'dat'].reduce((res, x) => {
+  return Promise.resolve(['http', 'https', 'hyper', 'dat'].reduce((res, x) => {
     res[x] = app.isDefaultProtocolClient(x)
     return res
   }, {}))
@@ -584,6 +622,56 @@ export function restartBrowser () {
   }
 }
 
+export function openChromeAccessibilityUrl () {
+  openUrl('chrome://accessibility/', {setActive: true});
+}
+export function openChromeBlobUrl () {
+  openUrl('chrome://blob-internals/', {setActive: true});
+}
+export function openChromeDinoUrl () {
+  openUrl('chrome://dino/', {setActive: true});
+}
+export function openChromeGpuUrl () {
+  new BrowserWindow({width: 1024, height: 768, title: "GPU Internals"}).loadURL('chrome://gpu/', {setActive: true, title: "GPU Internals"});
+  logger.info('Opened chrome://gpu');
+}
+export function openChromeHistogramsUrl () {
+  openUrl('chrome://histograms/', {setActive: true});
+}
+export function openChromeIndexDbUrl () {
+  openUrl('chrome://indexeddb-internals/', {setActive: true});
+}
+export function openChromeMediaUrl () {
+  openUrl('chrome://media-internals/', {setActive: true});
+}
+export function openChromeNetErrorsUrl () {
+  openUrl('chrome://network-errors/', {setActive: true});
+}
+export function openChromeProcessesUrl () {
+  new BrowserWindow({width: 1024, height: 768, title: "Process Model Internals"}).loadURL('chrome://process-internals/', {setActive: true});
+  logger.info('Opened Process Internals!');
+}
+export function openChromeServiceWorkerUrl () {
+  openUrl('chrome://serviceworker-internals/', {setActive: true});
+}
+export function openChromeTracingUrl () {
+  openUrl('chrome://tracing/', {setActive: true});
+}
+export function openChromeUkmUrl () {
+  openUrl('chrome://ukm/', {setActive: true});
+}
+export function openChromeWebRtcUrl () {
+  openUrl('chrome://webrtc-internals/', {setActive: true});
+}
+export function viewShellState () {
+  new BrowserWindow({width: 1024, height: 768, title: "Shell Window State"}).loadFile(shell_window_state, {setActive: true});
+  electronLog.info('Opened shell-window-state.json');
+}
+export function viewBeakerLog () {
+  new BrowserWindow({width: 1024, height: 768, title: "Beaker Log"}).loadFile(raw_beaker_log, {setActive: true});
+  electronLog.info('Opened beaker.log');
+}
+
 export function getSetting (key) {
   return settingsDb.get(key)
 }
@@ -598,6 +686,7 @@ export function setSetting (key, value) {
 
 export function updateAdblocker () {
   return adblocker.setup()
+  electronLog.info('Adblocker is now active');
 }
 
 export async function migrate08to09 () {
@@ -616,13 +705,17 @@ export async function capturePage (url, opts = {}) {
     webPreferences: {
       preload: 'file://' + path.join(app.getAppPath(), 'fg', 'webview-preload', 'index.build.js'),
       contextIsolation: true,
+      experimentalFeatures: true,
+      devTools: true,
       webviewTag: false,
       sandbox: true,
+      plugins: true,
       defaultEncoding: 'utf-8',
       nativeWindowOpen: true,
       nodeIntegration: false,
       navigateOnDragDrop: true,
-      enableRemoteModule: false
+      enableRemoteModule: false,
+      worldSafeExecuteJavaScript: false
     }
   })
   win.loadURL(url)

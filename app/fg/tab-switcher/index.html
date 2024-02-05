@@ -1,9 +1,10 @@
 <html>
   <head>
+    <title>Tab Switcher</title>
     <style>
       body {
         background: transparent;
-        border: 1px solid #aab;
+        border: 1px solid #5746FF;
         border-radius: 8px;
         margin: 10px;
         user-select: none;
@@ -11,12 +12,15 @@
       }
       main {
         display: grid;
-        background: #fff;
+        background: #ddd;
         grid-auto-flow: column;
         grid-gap: 10px;
         font-family: -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", Ubuntu, Cantarell, "Oxygen Sans", "Helvetica Neue", sans-serif;
         font-size: 12px;
-        padding: 10px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 10px;
+        padding-right: 10px;
         box-sizing: border-box;
         border-radius: 8px;
         overflow-x: hidden;
@@ -30,7 +34,12 @@
         box-sizing: border-box;
       }
       main > div.selected {
-        background: #f0f0f7;
+        background: #aaa;
+        border: 1px solid #5746FF;
+      }
+      main > div:active {
+        background: #aaa;
+        border: 1px solid transparent;
       }
       main > div img {
         display: block;
@@ -68,11 +77,11 @@
       for (let tab of tabs) {
         let imgEl = document.createElement('img')
         imgEl.setAttribute('src', `asset:favicon:${tab.url}`)
-        
+
         let titleEl = document.createElement('div')
         titleEl.classList.add('title')
         titleEl.textContent = tab.title
-        
+
         let tabEl = document.createElement('div')
         tabEl.classList.add('tab')
         tabEl.dataset.index = i++

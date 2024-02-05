@@ -1,0 +1,35 @@
+diff --git a/node_modules/app-builder-lib/out/util/AppFileWalker.js b/node_modules/app-builder-lib/out/util/AppFileWalker.js
+index df9f8b0..2ba73c8 100644
+--- a/node_modules/app-builder-lib/out/util/AppFileWalker.js
++++ b/node_modules/app-builder-lib/out/util/AppFileWalker.js
+@@ -57,9 +57,11 @@ function createAppFilter(matcher, packager) {
+     }
+     const filter = matcher.createFilter();
+     return (file, fileStat) => {
+-        if (!nodeModulesFilter(file, fileStat)) {
+-            return !!packager.config.includeSubNodeModules;
++      if (!nodeModulesFilter(file, fileStat)) {
++        if (!file.includes('dat')) {
++          return false;
+         }
++      }
+         return filter(file, fileStat);
+     };
+ }
+@@ -77,13 +79,9 @@ class AppFileWalker extends FileCopyHelper {
+             // but do not filter if we inside node_modules dir
+             // update: solution disabled, node module resolver should support such setup
+             if (file.endsWith(nodeModulesSystemDependentSuffix)) {
+-                if (!this.packager.config.includeSubNodeModules) {
+-                    const matchesFilter = this.matcherFilter(file, fileStat);
+-                    if (!matchesFilter) {
+-                        // Skip the file
+-                        return false;
+-                    }
+-                }
++              if (!file.includes('dat')) {
++                return false;
++              }
+             }
+         }
+         else {
