@@ -58,7 +58,7 @@ export const setup = async function (opts) {
     adblock_lists: [
       {name: 'EasyList', url: 'https://easylist.to/easylist/easylist.txt', selected: true},
       {name: 'EasyPrivacy', url: 'https://easylist.to/easylist/easyprivacy.txt', selected: true},
-      {name: 'EasyList Cookie List', url: 'https://easylist-downloads.adblockplus.org/easylist-cookie.txt', selected: true},
+      {name: 'EasyList Cookie List', url: 'https://secure.fanboy.co.nz/fanboy-cookiemonster.txt', selected: true},
       {name: 'Fanboy\'s Social Blocking List', url: 'https://easylist.to/easylist/fanboy-social.txt', selected: true},
       {name: 'Fanboy\'s Annoyance List', url: 'https://easylist.to/easylist/fanboy-annoyance.txt', selected: true},
       {name: 'Adblock Warning Removal List', url: 'https://easylist-downloads.adblockplus.org/antiadblockfilters.txt', selected: true},
