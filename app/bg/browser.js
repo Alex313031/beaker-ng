@@ -557,13 +557,31 @@ export function removeAsDefaultProtocolClient (protocol) {
   return Promise.resolve(app.removeAsDefaultProtocolClient(protocol))
 }
 
+export const isLinux = process.platform === 'linux';
+export const isWin = process.platform === 'win32';
+export const isMac = process.platform === 'darwin';
+let whatOS;
+if (isLinux) {
+  whatOS = 'Linux';
+} else if (isWin) {
+  whatOS = 'Windows';
+} else if (isMac) {
+  whatOS = 'MacOS';
+} else {
+  whatOS = 'BSD';
+}
+export const osType = whatOS;
+export const archType = os.arch();
+
 export function getInfo () {
   return {
     version: app.getVersion(),
     electronVersion: process.versions.electron,
     chromiumVersion: process.versions.chrome,
     nodeVersion: process.versions.node,
+    v8Version: process.versions.v8,
     platform: os.platform(),
+    fullPlatform: osType + ' ' + archType,
     updater: {
       isBrowserUpdatesSupported,
       error: updaterError,
