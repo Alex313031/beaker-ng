@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright(c) 2023 Alex313031
+# Copyright(c) 2024 Alex313031
 
 YEL='\033[1;33m' # Yellow
 CYA='\033[1;96m' # Cyan
@@ -112,7 +112,7 @@ export ELECTRON_CACHE="${PWD}/electron/bin" &&
 export electron_config_cache="${PWD}/electron/bin" &&
 
 printf "\n" &&
-printf "${bold}${GRE} Building Beaker-ng...${c0}\n" &&
+printf "${bold}${GRE} Running Burnthemall! and Building Beaker-ng...${c0}\n" &&
 printf "\n" &&
 
 npm run burnthemall
@@ -165,7 +165,7 @@ export ELECTRON_CACHE="${PWD}/electron/bin" &&
 export electron_config_cache="${PWD}/electron/bin" &&
 
 printf "\n" &&
-printf "${bold}${GRE} Generating installation packages...${c0}\n" &&
+printf "${bold}${GRE} Packaging Beaker-ng...${c0}\n" &&
 printf "\n" &&
 
 export NODE_ENV=production &&
@@ -186,6 +186,4 @@ printf "${bold}${YEL}Use the --dist flag to generate installation packages.${c0}
 printf "${bold}${YEL}Use the --dir flag to build an unpacked dir in \`dist\`.${c0}\n" &&
 printf "${bold}${YEL}Use the --help flag to show this help.${c0}\n" &&
 printf "\n" &&
-
-tput sgr0 &&
-exit 0
+tput sgr0

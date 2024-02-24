@@ -2,6 +2,7 @@
   "productName": "Beaker Browser",
   "afterSign": "./afterSignHook.js",
   "appId": "com.alex313031.beaker-ng",
+  "generateUpdatesFilesForAllChannels": false,
   "asar": false,
   "asarUnpack": [
     "./fg/json-renderer/index.build.js",
@@ -64,12 +65,14 @@
   "linux": {
     "target": [
       "zip",
+      "rpm",
       "AppImage",
       "deb"
     ],
     "maintainer": "Alex313031",
     "vendor": "Alex313031",
     "synopsis": "An Experimental Peer-to-Peer Web Browser.",
+    "icon": "../build/icons",
     "category": "Network;WebBrowser;",
     "executableName": "beaker-browser",
     "artifactName": "Beaker_Browser_${version}_${arch}.${ext}",
@@ -101,6 +104,7 @@
       "zip",
       "nsis"
     ],
+    "icon": "../build/icon.ico",
     "publisherName": "Alex313031",
     "executableName": "Beaker",
     "artifactName": "Beaker_win64_${version}_${arch}.${ext}"
@@ -108,21 +112,26 @@
   "nsis": {
     "shortcutName": "Beaker Browser",
     "artifactName": "Beaker_Setup_${version}_${arch}.${ext}",
+    "uninstallDisplayName": "Beaker Browser ${version}",
     "deleteAppDataOnUninstall": false,
-    "uninstallDisplayName": "Beaker Browser ${version}"
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true
   },
   "mac": {
     "category": "public.app-category.productivity",
+    "icon": "../build/icon.icns",
     "hardenedRuntime": true,
+    "darkModeSupport": true,
     "type": "distribution",
     "entitlements": "../build/entitlements.plist",
     "entitlementsInherit": "../build/entitlements.plist",
     "extendInfo": {
       "NSCameraUsageDescription": "This app requires camera access to record video.",
       "NSMicrophoneUsageDescription": "This app requires microphone access to record audio."
-    }
-  },
-  "publish": {
-    "provider": "github"
+    },
+    "target": [
+      "dmg",
+      "zip"
+    ]
   }
 }

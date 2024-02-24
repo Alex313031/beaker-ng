@@ -16,13 +16,12 @@ die() { yell "$*"; exit 111; }
 try() { "$@" || die "${RED}Failed $*"; }
 
 printf "\n" &&
-printf "${bold}${GRE}Script to build Beaker-ng artifacts.${c0}\n" &&
+printf "${bold}${GRE}Script to clean Beaker-ng artifacts.${c0}\n" &&
 printf "\n" &&
-printf "${bold}${YEL} Cleaning node_modules...${c0}\n" &&
+printf "${bold}${YEL} Cleaning node_modules and build artifacts...${c0}\n" &&
 	
 npm run distclean &&
 npm run clean &&
-
 
 printf "\n" &&
 printf "${bold}${GRE}Done.\n" &&
