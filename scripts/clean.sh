@@ -22,6 +22,8 @@ printf "${bold}${YEL} Cleaning node_modules and build artifacts...${c0}\n" &&
 	
 npm run distclean &&
 npm run clean &&
+rm -r -f -v ../app/node_modules &&
+rm -r -f -v ../app/bg/dat/converter/node_modules &&
 
 printf "\n" &&
 printf "${bold}${GRE}Done.\n" &&
