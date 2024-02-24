@@ -288,7 +288,7 @@ async function beakerProtocol (request, respond) {
     return cb(200, 'OK', 'font/ttf', path.join(__dirname, `assets/js/editor/vs/${filePath}`))
   }
   if (requestUrl === 'beaker://webui' || requestUrl.startsWith('beaker://webui/')) {
-    return serveAppAsset(requestUrl, path.join(__dirname, 'userland', 'yiff'), cb)
+    return serveAppAsset(requestUrl, path.join(__dirname, 'userland', 'webui'), cb)
   }
 
   // debugging

@@ -1,7 +1,12 @@
 @import "beaker://app-stdlib/css/common.css";
 @import "beaker://assets/font-awesome.css";
 
-body {
+* {
+  box-sizing: border-box;
+}
+
+:root,
+:root.light {
   --border-color--default: #bbc;
   --border-color--light: #ccd;
   --border-color: var(--border-color--default);
@@ -16,17 +21,10 @@ body {
   --bg-color--message: #f3f3f8;
   --bg-color--subnav-item--hover: #f0f0f5;
   --bg-color--subnav-item--current: #dde;
-
-  font-size: 13px;
-  background: #fff;
-  color: #333;
-  margin: auto;
-  margin: 0.5em auto;
-  max-width: 48em;
 }
 
 @media (prefers-color-scheme: dark) {
-  body {
+  :root {
     --blue: #88c;
     --border-color--default: #666;
     --border-color--light: #555;
@@ -41,19 +39,23 @@ body {
     --bg-color--message: #333;
     --bg-color--subnav-item--hover: #444;
     --bg-color--subnav-item--current: #555;
-
-    font-size: 13px;
-    background: #222;
-    color: #ccc;
-    margin: auto;
-    margin: 0.5em auto;
-    max-width: 48em;
   }
 }
 
+body {
+  font-size: 13px;
+  background: var(--bg-color--default);
+  color: var(--text-color--default);
+  margin: 0.5em auto;
+  max-width: 48em;
+}
+
 img {
-  max-width: 100%;
+  max-width: 75%;
+  display: block;
   height: auto;
+  margin-left: auto;
+  margin-right: auto;
   margin-top: 8px;
   margin-bottom: 8px;
   border: 1px solid transparent;
@@ -70,8 +72,4 @@ img:active {
 .center {
   text-align: center;
   align-content: center;
-}
-
-.content {
-  padding: auto;
 }
